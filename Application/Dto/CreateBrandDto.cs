@@ -1,7 +1,6 @@
 ﻿namespace Application.Dto;
-public class BrandDto
+public class CreateBrandDto
 {
-	public int Id { get; set; }
 	public string Name { get; set; } = "";
 }
 

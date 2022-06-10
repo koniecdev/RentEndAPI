@@ -9,5 +9,7 @@ public static class AutoMapperConfig
 		new MapperConfiguration(cfg =>
 		{
 			cfg.CreateMap<Brand, BrandDto>();
+			cfg.CreateMap<CreateBrandDto, Brand>();
+			cfg.CreateMap<UpdateBrandDto, Brand>();
 		}).CreateMapper();
 }

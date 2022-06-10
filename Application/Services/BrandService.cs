@@ -1,6 +1,7 @@
 ﻿using Application.Dto;
 using Application.Interfaces;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Application.Services;
@@ -13,6 +14,7 @@ public class BrandService : IBrandService
 		_brandRepository = brandRepository;
 		_mapper = mapper;
 	}
+
 	public IEnumerable<BrandDto> GetAllBrands()
 	{
 		var x = _brandRepository.GetAll();
@@ -23,5 +25,19 @@ public class BrandService : IBrandService
 	{
 		var x = _brandRepository.GetByIdAsync(id);
 		return _mapper.Map<BrandDto>(x);
+	}
+
+	public BrandDto AddNewBrand(CreateBrandDto newBrand)
+	{
+		var brand = _mapper.Map<Brand>(newBrand);
+		_brandRepository.Add(brand);
+		return _mapper.Map<BrandDto>(brand);
+	}
+
+	public void UpdateBrand(UpdateBrandDto updatedBrand)
+	{
+		var fromDb = _brandRepository.GetByIdAsync(updatedBrand.Id);
+		var brand = _mapper.Map(updatedBrand, fromDb);
+		_brandRepository.Update(brand);
 	}
 }
