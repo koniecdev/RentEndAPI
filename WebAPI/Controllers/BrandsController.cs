@@ -67,5 +67,20 @@ namespace WebAPI.Controllers
 			_brandService.UpdateBrand(updateBrandDto);
 			return NoContent();
 		}
+		[HttpDelete]
+		public IActionResult Delete(int id)
+		{
+			if(id == 0)
+			{
+				return NotFound();
+			}
+			var fromDb = _brandService.GetById(id);
+			if(fromDb == null)
+			{
+				return NotFound();
+			}
+			_brandService.DeleteBrand(id);
+			return NoContent();
+		}
 	}
 }

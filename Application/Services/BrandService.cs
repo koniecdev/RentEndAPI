@@ -23,7 +23,7 @@ public class BrandService : IBrandService
 
 	public BrandDto GetById(int id)
 	{
-		var x = _brandRepository.GetByIdAsync(id);
+		var x = _brandRepository.GetById(id);
 		return _mapper.Map<BrandDto>(x);
 	}
 
@@ -36,8 +36,14 @@ public class BrandService : IBrandService
 
 	public void UpdateBrand(UpdateBrandDto updatedBrand)
 	{
-		var fromDb = _brandRepository.GetByIdAsync(updatedBrand.Id);
+		var fromDb = _brandRepository.GetById(updatedBrand.Id);
 		var brand = _mapper.Map(updatedBrand, fromDb);
 		_brandRepository.Update(brand);
+	}
+
+	public void DeleteBrand(int id)
+	{
+		var fromDb = _brandRepository.GetById(id);
+		_brandRepository.Delete(fromDb);
 	}
 }

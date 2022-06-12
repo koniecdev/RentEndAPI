@@ -8,5 +8,6 @@ public interface IBrandService
 	BrandDto GetById(int id);
 	BrandDto AddNewBrand(CreateBrandDto newBrand);
 	public void UpdateBrand(UpdateBrandDto newBrand);
+	public void DeleteBrand(int id);
 }
 

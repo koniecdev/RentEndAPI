@@ -15,7 +15,7 @@ public class BrandRepository : IBrandRepository
 	{
 		return brands;
 	}
-	public Brand GetByIdAsync(int id)
+	public Brand GetById(int id)
 	{
 		return brands.FirstOrDefault(m=>m.Id.Equals(id));
 	}
