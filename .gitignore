@@ -455,3 +455,5 @@ $RECYCLE.BIN/
 
 appsettings.json
 appsettings.Development.json
+./WebAPI/appsettings.json
+Infrastructure/Data/Migrations/*.cs
