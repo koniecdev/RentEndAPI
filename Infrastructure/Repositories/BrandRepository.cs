@@ -1,39 +1,51 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 public class BrandRepository : IBrandRepository
 {
-	private static readonly List<Brand> brands = new()
+	private readonly RentendContext _db;
+	//private static readonly List<Brand> brands = new()
+	//{
+	//	new Brand(1, "Honda"),
+	//	new Brand(2, "Mitsubishi"),
+	//	new Brand(3, "Toyota")
+	//};
+	public BrandRepository(RentendContext db)
 	{
-		new Brand(1, "Honda"),
-		new Brand(2, "Mitsubishi"),
-		new Brand(3, "Toyota")
-	};
-
-	public IEnumerable<Brand> GetAll()
-	{
-		return brands;
+		_db = db;
 	}
-	public Brand GetById(int id)
+	public async Task<IEnumerable<Brand>> GetAll()
 	{
-		return brands.FirstOrDefault(m=>m.Id.Equals(id));
+		return await _db.Brands.ToListAsync();
+	}
+	public async Task<Brand> GetById(int id)
+	{
+		var r = await _db.Brands.FirstOrDefaultAsync(m => m.Id.Equals(id));
+		if(r == null)
+		{
+			throw new Exception("No such item exists");
+		}
+		return r;
 	}
 	public Brand Add(Brand brand)
 	{
-		int Id = brands.Max(m => m.Id) + 1;
-		brand.Id = Id;
 		brand.Created = DateTime.UtcNow;
-		brands.Add(brand);
+		_db.Brands.Add(brand);
+		_db.SaveChanges();
 		return brand;
 	}
 	public void Update(Brand brand)
 	{
 		brand.LastModified = DateTime.UtcNow;
+		_db.SaveChanges();
 	}
 	public void Delete(Brand brand)
 	{
-		brands.Remove(brand);
+		_db.Brands.Remove(brand);
+		_db.SaveChanges();
 	}
 }
 

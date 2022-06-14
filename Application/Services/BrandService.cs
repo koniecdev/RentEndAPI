@@ -17,13 +17,13 @@ public class BrandService : IBrandService
 
 	public IEnumerable<BrandDto> GetAllBrands()
 	{
-		var x = _brandRepository.GetAll();
+		var x = _brandRepository.GetAll().Result;
 		return _mapper.Map<IEnumerable<BrandDto>>(x);
 	}
 
 	public BrandDto GetById(int id)
 	{
-		var x = _brandRepository.GetById(id);
+		var x = _brandRepository.GetById(id).Result;
 		return _mapper.Map<BrandDto>(x);
 	}
 
@@ -36,14 +36,14 @@ public class BrandService : IBrandService
 
 	public void UpdateBrand(UpdateBrandDto updatedBrand)
 	{
-		var fromDb = _brandRepository.GetById(updatedBrand.Id);
+		var fromDb = _brandRepository.GetById(updatedBrand.Id).Result;
 		var brand = _mapper.Map(updatedBrand, fromDb);
 		_brandRepository.Update(brand);
 	}
 
 	public void DeleteBrand(int id)
 	{
-		var fromDb = _brandRepository.GetById(id);
+		var fromDb = _brandRepository.GetById(id).Result;
 		_brandRepository.Delete(fromDb);
 	}
 }
