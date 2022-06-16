@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Common;
+using Microsoft.AspNetCore.Identity;
 namespace Domain.Entities;
-public class Rent
+public class Rent : AuditableEntity
 {
     [Key]
     public int Id { get; set; }

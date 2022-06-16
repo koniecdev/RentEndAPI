@@ -7,22 +7,22 @@ namespace WebAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class BrandsController : ControllerBase
+	public class CarsController : ControllerBase
 	{
-		private readonly IBrandService _brandService;
-		public BrandsController(IBrandService brandService)
+		private readonly ICarService _carService;
+		public CarsController(ICarService carService)
 		{
-			_brandService = brandService;
+			_carService = carService;
 		}
 		[HttpGet]
 		public IActionResult Get()
 		{
-			var brands = _brandService.GetAllBrands();
-			if(brands == null)
+			var cars = _carService.GetAllCars();
+			if(cars == null)
 			{
 				return NotFound();
 			}
-			return Ok(brands);
+			return Ok(cars);
 		}
 		[HttpGet("{id}")]
 		public IActionResult Get(int id)
@@ -31,40 +31,40 @@ namespace WebAPI.Controllers
 			{
 				return NotFound();
 			}
-			var brand = _brandService.GetById(id);
-			if(brand == null)
+			var car = _carService.GetById(id);
+			if(car == null)
 			{
 				return NotFound();
 			}
-			return Ok(brand);
+			return Ok(car);
 		}
 		[HttpPost]
-		public IActionResult Create(CreateBrandDto createBrandDto)
+		public IActionResult Create(CreateCarDto createCarDto)
 		{
-			if(createBrandDto == null)
+			if(createCarDto == null)
 			{
 				return BadRequest();
 			}
-			if(string.IsNullOrWhiteSpace(createBrandDto.Name))
+			if(string.IsNullOrWhiteSpace(createCarDto.Model))
 			{
 				return UnprocessableEntity();
 			}
-			var brand = _brandService.AddNewBrand(createBrandDto);
-			return Created($"api/Brands/{brand.Id}", brand);
+			var car = _carService.AddNewCar(createCarDto);
+			return Created($"api/Cars/{car.Id}", car);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdateBrandDto updateBrandDto)
+		public IActionResult Update(int id, UpdateCarDto updateCarDto)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _brandService.GetById(id);
+			var fromDb = _carService.GetById(id);
 			if (fromDb == null)
 			{
 				return NotFound();
 			}
-			_brandService.UpdateBrand(id, updateBrandDto);
+			_carService.UpdateCar(id, updateCarDto);
 			return NoContent();
 		}
 		[HttpDelete]
@@ -74,12 +74,12 @@ namespace WebAPI.Controllers
 			{
 				return NotFound();
 			}
-			var fromDb = _brandService.GetById(id);
+			var fromDb = _carService.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			_brandService.DeleteBrand(id);
+			_carService.DeleteCar(id);
 			return NoContent();
 		}
 	}

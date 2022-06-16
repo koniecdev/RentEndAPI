@@ -1,5 +1,7 @@
-﻿namespace Domain.Entities;
-public class Car
+﻿using Domain.Common;
+
+namespace Domain.Entities;
+public class Car : AuditableEntity
 {
     [Key]
     public int Id { get; set; }

@@ -1,5 +1,7 @@
-﻿namespace Domain.Entities;
-public class Department
+﻿using Domain.Common;
+
+namespace Domain.Entities;
+public class Department : AuditableEntity
 {
     [Key]
     public int Id { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Application.Dto;
 using Application.Interfaces;
+using Application.Mappings;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -34,11 +35,14 @@ public class BrandService : IBrandService
 		return _mapper.Map<BrandDto>(brand);
 	}
 
-	public void UpdateBrand(UpdateBrandDto updatedBrand)
+	public void UpdateBrand(int id, UpdateBrandDto updatedBrand)
 	{
-		var fromDb = _brandRepository.GetById(updatedBrand.Id).Result;
-		var brand = _mapper.Map(updatedBrand, fromDb);
-		_brandRepository.Update(brand);
+		var fromDb = _brandRepository.GetById(id).Result;
+		if(updatedBrand != null)
+		{
+			var returned = PatchRequestMap.PatchMap(fromDb, updatedBrand);
+			_brandRepository.Update(returned);
+		}
 	}
 
 	public void DeleteBrand(int id)

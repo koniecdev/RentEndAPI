@@ -7,22 +7,22 @@ namespace WebAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class BrandsController : ControllerBase
+	public class DepartmentsController : ControllerBase
 	{
-		private readonly IBrandService _brandService;
-		public BrandsController(IBrandService brandService)
+		private readonly IDepartmentService _service;
+		public DepartmentsController(IDepartmentService service)
 		{
-			_brandService = brandService;
+			_service = service;
 		}
 		[HttpGet]
 		public IActionResult Get()
 		{
-			var brands = _brandService.GetAllBrands();
-			if(brands == null)
+			var fromDb = _service.GetAllDepartments();
+			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			return Ok(brands);
+			return Ok(fromDb);
 		}
 		[HttpGet("{id}")]
 		public IActionResult Get(int id)
@@ -31,40 +31,40 @@ namespace WebAPI.Controllers
 			{
 				return NotFound();
 			}
-			var brand = _brandService.GetById(id);
-			if(brand == null)
+			var fromDb = _service.GetById(id);
+			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			return Ok(brand);
+			return Ok(fromDb);
 		}
 		[HttpPost]
-		public IActionResult Create(CreateBrandDto createBrandDto)
+		public IActionResult Create(CreateDepartmentDto dto)
 		{
-			if(createBrandDto == null)
+			if(dto == null)
 			{
 				return BadRequest();
 			}
-			if(string.IsNullOrWhiteSpace(createBrandDto.Name))
+			if(string.IsNullOrWhiteSpace(dto.City) || string.IsNullOrWhiteSpace(dto.FullAddress))
 			{
 				return UnprocessableEntity();
 			}
-			var brand = _brandService.AddNewBrand(createBrandDto);
-			return Created($"api/Brands/{brand.Id}", brand);
+			var returned = _service.AddNewDepartment(dto);
+			return Created($"api/Departments/{returned.Id}", returned);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdateBrandDto updateBrandDto)
+		public IActionResult Update(int id, UpdateDepartmentDto dto)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _brandService.GetById(id);
+			var fromDb = _service.GetById(id);
 			if (fromDb == null)
 			{
 				return NotFound();
 			}
-			_brandService.UpdateBrand(id, updateBrandDto);
+			_service.UpdateDepartment(id, dto);
 			return NoContent();
 		}
 		[HttpDelete]
@@ -74,12 +74,12 @@ namespace WebAPI.Controllers
 			{
 				return NotFound();
 			}
-			var fromDb = _brandService.GetById(id);
+			var fromDb = _service.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			_brandService.DeleteBrand(id);
+			_service.DeleteDepartment(id);
 			return NoContent();
 		}
 	}

@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
 
-public class Pin
+namespace Domain.Entities;
+
+public class Pin : AuditableEntity
 {
     [Key]
     public int Id { get; set; }
