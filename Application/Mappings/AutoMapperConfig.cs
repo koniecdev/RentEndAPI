@@ -17,5 +17,8 @@ public static class AutoMapperConfig
 			cfg.CreateMap<Department, DepartmentDto>();
 			cfg.CreateMap<CreateDepartmentDto, Department>();
 			cfg.CreateMap<UpdateDepartmentDto, Department>();
+			cfg.CreateMap<Pin, PinDto>();
+			cfg.CreateMap<CreatePinDto, Pin>();
+			cfg.CreateMap<UpdatePinDto, Pin>();
 		}).CreateMapper();
 }

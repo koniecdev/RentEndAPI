@@ -7,8 +7,9 @@ public class Rent : AuditableEntity
     public int Id { get; set; }
     public string UserId { get; set; } = "";
     public int CarId { get; set; }
-
+    [Required]
     public DateTime Since { get; set; }
+    [Required]
     public DateTime Until { get; set; }
     [Required]
     [MaxLength(10)]
