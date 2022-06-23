@@ -20,5 +20,8 @@ public static class AutoMapperConfig
 			cfg.CreateMap<Pin, PinDto>();
 			cfg.CreateMap<CreatePinDto, Pin>();
 			cfg.CreateMap<UpdatePinDto, Pin>();
+			cfg.CreateMap<Rent, RentDto>();
+			cfg.CreateMap<CreateRentDto, Rent>();
+			cfg.CreateMap<UpdateRentDto, Rent>();
 		}).CreateMapper();
 }

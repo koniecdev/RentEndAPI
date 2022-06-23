@@ -7,17 +7,17 @@ namespace WebAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class DepartmentsController : ControllerBase
+	public class RentController : ControllerBase
 	{
-		private readonly IDepartmentService _service;
-		public DepartmentsController(IDepartmentService service)
+		private readonly IRentService _service;
+		public RentController(IRentService service)
 		{
 			_service = service;
 		}
 		[HttpGet]
 		public IActionResult Get()
 		{
-			var fromDb = _service.GetAllDepartments();
+			var fromDb = _service.GetAllRents();
 			if(fromDb == null)
 			{
 				return NotFound();
@@ -38,22 +38,36 @@ namespace WebAPI.Controllers
 			}
 			return Ok(fromDb);
 		}
+		[HttpGet("{departmentId}")]
+		public IActionResult Get(int departmentId, DateTime since, DateTime until)
+		{
+			if (departmentId <= 0)
+			{
+				return NotFound();
+			}
+			var fromDb = _service.GetAllRents(departmentId, since, until);
+			if (fromDb == null)
+			{
+				return NotFound();
+			}
+			return Ok(fromDb);
+		}
 		[HttpPost]
-		public IActionResult Create(CreateDepartmentDto dto)
+		public IActionResult Create(CreateRentDto dto)
 		{
 			if(dto == null)
 			{
 				return BadRequest();
 			}
-			if(string.IsNullOrWhiteSpace(dto.City) || string.IsNullOrWhiteSpace(dto.FullAddress))
+			if(string.IsNullOrWhiteSpace(dto.UserId))
 			{
 				return UnprocessableEntity();
 			}
-			var returned = _service.AddNewDepartment(dto);
+			var returned = _service.AddNewRent(dto);
 			return Created($"api/Departments/{returned.Id}", returned);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdateDepartmentDto dto)
+		public IActionResult Update(int id, UpdateRentDto dto)
 		{
 			if(id <= 0)
 			{
@@ -64,7 +78,7 @@ namespace WebAPI.Controllers
 			{
 				return NotFound();
 			}
-			_service.UpdateDepartment(id, dto);
+			_service.UpdateRent(id, dto);
 			return NoContent();
 		}
 		[HttpDelete("{id}")]
@@ -79,7 +93,7 @@ namespace WebAPI.Controllers
 			{
 				return NotFound();
 			}
-			_service.DeleteDepartment(id);
+			_service.DeleteRent(id);
 			return NoContent();
 		}
 	}

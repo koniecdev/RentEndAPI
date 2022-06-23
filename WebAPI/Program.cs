@@ -22,6 +22,8 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IPinRepository, PinRepository>();
 builder.Services.AddScoped<IPinService, PinService>();
+builder.Services.AddScoped<IRentRepository, RentRepository>();
+builder.Services.AddScoped<IRentService, RentService>();
 builder.Services.AddSingleton(AutoMapperConfig.Initialize());
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

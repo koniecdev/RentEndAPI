@@ -17,13 +17,13 @@ public class BrandRepository : IBrandRepository
 	{
 		_db = db;
 	}
-	public async Task<IEnumerable<Brand>> GetAll()
+	public IEnumerable<Brand> GetAll()
 	{
-		return await _db.Brands.ToListAsync();
+		return _db.Brands.ToList();
 	}
-	public async Task<Brand> GetById(int id)
+	public Brand GetById(int id)
 	{
-		var r = await _db.Brands.FirstOrDefaultAsync(m => m.Id.Equals(id));
+		var r = _db.Brands.FirstOrDefault(m => m.Id.Equals(id));
 		if(r == null)
 		{
 			throw new Exception("No such item exists");

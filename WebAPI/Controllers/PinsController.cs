@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
 			_service.UpdatePin(id, dto);
 			return NoContent();
 		}
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
 			if(id == 0)

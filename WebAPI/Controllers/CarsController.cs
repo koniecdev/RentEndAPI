@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
 			_carService.UpdateCar(id, updateCarDto);
 			return NoContent();
 		}
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
 			if(id == 0)

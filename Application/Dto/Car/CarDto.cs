@@ -1,4 +1,6 @@
-﻿namespace Application.Dto;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Application.Dto;
 public class CarDto
 {
 	public int Id { get; set; }
@@ -17,7 +19,12 @@ public class CarDto
     public int PricePerWeek { get; set; }
     public int PricePerMonth { get; set; }
     public int BrandId { get; set; }
+    [ForeignKey("BrandId")]
+    public virtual BrandDto Brand { get; set; }
     public int? DepartamentId { get; set; }
+    [ForeignKey("DepartamentId")]
+    public virtual DepartmentDto Departament { get; set; }
+
 
 }
 

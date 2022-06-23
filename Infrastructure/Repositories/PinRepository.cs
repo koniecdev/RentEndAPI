@@ -13,11 +13,11 @@ public class PinRepository : IPinRepository
 	}
 	public IEnumerable<Pin> GetAll()
 	{
-		return _db.Pins.ToList();
+		return _db.Pins.Include(m => m.Car).ThenInclude(m => m.Brand).ToList();
 	}
 	public Pin GetById(int id)
 	{
-		var r = _db.Pins.FirstOrDefault(m => m.Id.Equals(id));
+		var r = _db.Pins.Include(m=>m.Car).ThenInclude(m=>m.Brand).FirstOrDefault(m => m.Id.Equals(id));
 		if(r == null)
 		{
 			throw new Exception("No such item exists");
