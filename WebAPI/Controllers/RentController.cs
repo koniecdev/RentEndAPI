@@ -15,9 +15,9 @@ namespace WebAPI.Controllers
 			_service = service;
 		}
 		[HttpGet]
-		public IActionResult Get()
+		public async Task<IActionResult> Get()
 		{
-			var fromDb = _service.GetAllRents();
+			var fromDb = await _service.GetAllRents();
 			if(fromDb == null)
 			{
 				return NotFound();
@@ -25,27 +25,28 @@ namespace WebAPI.Controllers
 			return Ok(fromDb);
 		}
 		[HttpGet("{id}")]
-		public IActionResult Get(int id)
+		public async Task<IActionResult> Get(int id)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetById(id);
+			var fromDb = await _service.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
 			return Ok(fromDb);
 		}
-		[HttpGet("{departmentId}")]
-		public IActionResult Get(int departmentId, DateTime since, DateTime until)
+		[HttpGet]
+		[Route("GetByDate/{departmentId}")]
+		public async Task<IActionResult> Get(int departmentId, DateTime since, DateTime until)
 		{
 			if (departmentId <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetAllRents(departmentId, since, until);
+			var fromDb = await _service.GetAllRents(departmentId, since, until);
 			if (fromDb == null)
 			{
 				return NotFound();
@@ -53,7 +54,7 @@ namespace WebAPI.Controllers
 			return Ok(fromDb);
 		}
 		[HttpPost]
-		public IActionResult Create(CreateRentDto dto)
+		public async Task<IActionResult> Create(CreateRentDto dto)
 		{
 			if(dto == null)
 			{
@@ -63,37 +64,37 @@ namespace WebAPI.Controllers
 			{
 				return UnprocessableEntity();
 			}
-			var returned = _service.AddNewRent(dto);
+			var returned = await _service.AddNewRent(dto);
 			return Created($"api/Departments/{returned.Id}", returned);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdateRentDto dto)
+		public async Task<IActionResult> Update(int id, UpdateRentDto dto)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetById(id);
+			var fromDb = await _service.GetById(id);
 			if (fromDb == null)
 			{
 				return NotFound();
 			}
-			_service.UpdateRent(id, dto);
+			await _service.UpdateRent(id, dto);
 			return NoContent();
 		}
 		[HttpDelete("{id}")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			if(id == 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetById(id);
+			var fromDb = await _service.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			_service.DeleteRent(id);
+			await _service.DeleteRent(id);
 			return NoContent();
 		}
 	}

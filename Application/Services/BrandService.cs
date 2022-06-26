@@ -16,38 +16,41 @@ public class BrandService : IBrandService
 		_mapper = mapper;
 	}
 
-	public IEnumerable<BrandDto> GetAllBrands()
+	public async Task<IEnumerable<BrandDto>> GetAllBrands()
 	{
-		var x = _brandRepository.GetAll();
+		var x = await _brandRepository.GetAll();
 		return _mapper.Map<IEnumerable<BrandDto>>(x);
 	}
 
-	public BrandDto GetById(int id)
+	public async Task<BrandDto> GetById(int id)
 	{
-		var x = _brandRepository.GetById(id);
+		var x = await _brandRepository.GetById(id);
 		return _mapper.Map<BrandDto>(x);
 	}
 
-	public BrandDto AddNewBrand(CreateBrandDto newBrand)
+	public async Task<BrandDto> AddNewBrand(CreateBrandDto newBrand)
 	{
 		var brand = _mapper.Map<Brand>(newBrand);
-		_brandRepository.Add(brand);
+		await _brandRepository.Add(brand);
 		return _mapper.Map<BrandDto>(brand);
 	}
 
-	public void UpdateBrand(int id, UpdateBrandDto updatedBrand)
+	public async Task UpdateBrand(int id, UpdateBrandDto updatedBrand)
 	{
-		var fromDb = _brandRepository.GetById(id);
-		if(updatedBrand != null)
+		var fromDb = await _brandRepository.GetById(id);
+		if(updatedBrand != null && fromDb != null)
 		{
 			var returned = PatchRequestMap.PatchMap(fromDb, updatedBrand);
-			_brandRepository.Update(returned);
+			await _brandRepository.Update(returned);
 		}
 	}
 
-	public void DeleteBrand(int id)
+	public async Task DeleteBrand(int id)
 	{
-		var fromDb = _brandRepository.GetById(id);
-		_brandRepository.Delete(fromDb);
+		var fromDb = await _brandRepository.GetById(id);
+		if(fromDb != null)
+		{
+			await _brandRepository.Delete(fromDb);
+		}
 	}
 }

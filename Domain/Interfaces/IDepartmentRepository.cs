@@ -3,9 +3,9 @@
 namespace Domain.Interfaces;
 public interface IDepartmentRepository
 {
-	IEnumerable<Department> GetAll();
-	Department GetById(int id);
-	Department Add(Department department);
-	void Update(Department department);
-	void Delete(Department department);
+	Task<IEnumerable<Department>> GetAll();
+	Task<Department> GetById(int id);
+	Task<Department> Add(Department department);
+	Task Update(Department department);
+	Task Delete(Department department);
 }

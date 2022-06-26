@@ -11,35 +11,36 @@ public class DepartmentRepository : IDepartmentRepository
 	{
 		_db = db;
 	}
-	public IEnumerable<Department> GetAll()
+	public async Task<IEnumerable<Department>> GetAll()
 	{
-		return _db.Departments.ToList();
+		var list = await _db.Departments.ToListAsync();
+		return list;
 	}
-	public Department GetById(int id)
+	public async Task<Department> GetById(int id)
 	{
-		var r = _db.Departments.FirstOrDefault(m => m.Id.Equals(id));
+		var r = await _db.Departments.FirstOrDefaultAsync(m => m.Id.Equals(id));
 		if(r == null)
 		{
 			throw new Exception("No such item exists");
 		}
 		return r;
 	}
-	public Department Add(Department department)
+	public async Task<Department> Add(Department department)
 	{
 		department.Created = DateTime.UtcNow;
 		_db.Departments.Add(department);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 		return department;
 	}
-	public void Update(Department department)
+	public async Task Update(Department department)
 	{
 		department.LastModified = DateTime.UtcNow;
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
-	public void Delete(Department department)
+	public async Task Delete(Department department)
 	{
 		_db.Departments.Remove(department);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
 }
 

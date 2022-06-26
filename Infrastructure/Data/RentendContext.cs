@@ -12,5 +12,6 @@ public class RentendContext : IdentityDbContext
 	public DbSet<Car> Cars { get; set; }
 	public DbSet<Pin> Pins { get; set; }
 	public DbSet<Rent> Rent { get; set; }
+	public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 }
 

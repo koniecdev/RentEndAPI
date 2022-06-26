@@ -7,45 +7,40 @@ namespace Infrastructure.Repositories;
 public class BrandRepository : IBrandRepository
 {
 	private readonly RentendContext _db;
-	//private static readonly List<Brand> brands = new()
-	//{
-	//	new Brand(1, "Honda"),
-	//	new Brand(2, "Mitsubishi"),
-	//	new Brand(3, "Toyota")
-	//};
 	public BrandRepository(RentendContext db)
 	{
 		_db = db;
 	}
-	public IEnumerable<Brand> GetAll()
+	public async Task<IEnumerable<Brand>> GetAll()
 	{
-		return _db.Brands.ToList();
+		var list = await _db.Brands.ToListAsync();
+		return list;
 	}
-	public Brand GetById(int id)
+	public async Task<Brand> GetById(int id)
 	{
-		var r = _db.Brands.FirstOrDefault(m => m.Id.Equals(id));
+		var r = await _db.Brands.FirstOrDefaultAsync(m => m.Id.Equals(id));
 		if(r == null)
 		{
 			throw new Exception("No such item exists");
 		}
 		return r;
 	}
-	public Brand Add(Brand brand)
+	public async Task<Brand> Add(Brand brand)
 	{
 		brand.Created = DateTime.UtcNow;
 		_db.Brands.Add(brand);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 		return brand;
 	}
-	public void Update(Brand brand)
+	public async Task Update(Brand brand)
 	{
 		brand.LastModified = DateTime.UtcNow;
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
-	public void Delete(Brand brand)
+	public async Task Delete(Brand brand)
 	{
 		_db.Brands.Remove(brand);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
 }
 

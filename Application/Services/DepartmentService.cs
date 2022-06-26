@@ -16,38 +16,41 @@ public class DepartmentService : IDepartmentService
 		_mapper = mapper;
 	}
 
-	public IEnumerable<DepartmentDto> GetAllDepartments()
+	public async Task<IEnumerable<DepartmentDto>> GetAllDepartments()
 	{
-		var fromDb = _repository.GetAll();
+		var fromDb = await _repository.GetAll();
 		return _mapper.Map<IEnumerable<DepartmentDto>>(fromDb);
 	}
 
-	public DepartmentDto GetById(int id)
+	public async Task<DepartmentDto> GetById(int id)
 	{
-		var fromDb = _repository.GetById(id);
+		var fromDb = await _repository.GetById(id);
 		return _mapper.Map<DepartmentDto>(fromDb);
 	}
 
-	public DepartmentDto AddNewDepartment(CreateDepartmentDto dto)
+	public async Task<DepartmentDto> AddNewDepartment(CreateDepartmentDto dto)
 	{
 		var mapped = _mapper.Map<Department>(dto);
-		_repository.Add(mapped);
+		await _repository.Add(mapped);
 		return _mapper.Map<DepartmentDto>(mapped);
 	}
 
-	public void UpdateDepartment(int id, UpdateDepartmentDto dto)
+	public async Task UpdateDepartment(int id, UpdateDepartmentDto dto)
 	{
-		var fromDb = _repository.GetById(id);
+		var fromDb = await _repository.GetById(id);
 		if(dto != null)
 		{
 			var returned = PatchRequestMap.PatchMap(fromDb, dto);
-			_repository.Update(returned);
+			await _repository.Update(returned);
 		}
 	}
 
-	public void DeleteDepartment(int id)
+	public async Task DeleteDepartment(int id)
 	{
-		var fromDb = _repository.GetById(id);
-		_repository.Delete(fromDb);
+		var fromDb = await _repository.GetById(id);
+		if(fromDb != null)
+		{
+			await _repository.Delete(fromDb);
+		}
 	}
 }

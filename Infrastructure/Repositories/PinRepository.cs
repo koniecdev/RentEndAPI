@@ -11,35 +11,36 @@ public class PinRepository : IPinRepository
 	{
 		_db = db;
 	}
-	public IEnumerable<Pin> GetAll()
+	public async Task<IEnumerable<Pin>> GetAll()
 	{
-		return _db.Pins.Include(m => m.Car).ThenInclude(m => m.Brand).ToList();
+		var list = await _db.Pins.Include(m => m.Car).ThenInclude(m => m.Brand).ToListAsync();
+		return list;
 	}
-	public Pin GetById(int id)
+	public async Task<Pin> GetById(int id)
 	{
-		var r = _db.Pins.Include(m=>m.Car).ThenInclude(m=>m.Brand).FirstOrDefault(m => m.Id.Equals(id));
+		var r = await _db.Pins.Include(m=>m.Car).ThenInclude(m=>m.Brand).FirstOrDefaultAsync(m => m.Id.Equals(id));
 		if(r == null)
 		{
 			throw new Exception("No such item exists");
 		}
 		return r;
 	}
-	public Pin Add(Pin pin)
+	public async Task<Pin> Add(Pin pin)
 	{
 		pin.Created = DateTime.UtcNow;
 		_db.Pins.Add(pin);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 		return pin;
 	}
-	public void Update(Pin pin)
+	public async Task Update(Pin pin)
 	{
 		pin.LastModified = DateTime.UtcNow;
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
-	public void Delete(Pin pin)
+	public async Task Delete(Pin pin)
 	{
 		_db.Pins.Remove(pin);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
 }
 

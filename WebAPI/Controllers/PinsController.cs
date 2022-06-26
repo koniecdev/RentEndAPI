@@ -15,9 +15,9 @@ namespace WebAPI.Controllers
 			_service = service;
 		}
 		[HttpGet]
-		public IActionResult Get()
+		public async Task<IActionResult> Get()
 		{
-			var fromDb = _service.GetAllPins();
+			var fromDb = await _service.GetAllPins();
 			if(fromDb == null)
 			{
 				return NotFound();
@@ -25,13 +25,13 @@ namespace WebAPI.Controllers
 			return Ok(fromDb);
 		}
 		[HttpGet("{id}")]
-		public IActionResult Get(int id)
+		public async Task<IActionResult> Get(int id)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetById(id);
+			var fromDb = await _service.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
 			return Ok(fromDb);
 		}
 		[HttpPost]
-		public IActionResult Create(CreatePinDto dto)
+		public async Task<IActionResult> Create(CreatePinDto dto)
 		{
 			if(dto == null)
 			{
@@ -49,37 +49,37 @@ namespace WebAPI.Controllers
 			{
 				return UnprocessableEntity();
 			}
-			var returned = _service.AddNewPin(dto);
+			var returned = await _service.AddNewPin(dto);
 			return Created($"api/Pins/{returned.Id}", returned);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdatePinDto dto)
+		public async Task<IActionResult> Update(int id, UpdatePinDto dto)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetById(id);
+			var fromDb = await _service.GetById(id);
 			if (fromDb == null)
 			{
 				return NotFound();
 			}
-			_service.UpdatePin(id, dto);
+			await _service.UpdatePin(id, dto);
 			return NoContent();
 		}
 		[HttpDelete("{id}")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			if(id == 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _service.GetById(id);
+			var fromDb = await _service.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			_service.DeletePin(id);
+			await _service.DeletePin(id);
 			return NoContent();
 		}
 	}

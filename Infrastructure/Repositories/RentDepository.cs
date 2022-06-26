@@ -7,50 +7,44 @@ namespace Infrastructure.Repositories;
 public class RentRepository : IRentRepository
 {
 	private readonly RentendContext _db;
-	//private static readonly List<Brand> brands = new()
-	//{
-	//	new Brand(1, "Honda"),
-	//	new Brand(2, "Mitsubishi"),
-	//	new Brand(3, "Toyota")
-	//};
 	public RentRepository(RentendContext db)
 	{
 		_db = db;
 	}
-	public IEnumerable<Rent> GetAll()
+	public async Task<IEnumerable<Rent>> GetAll()
 	{
-		return _db.Rent.ToList();
+		return await _db.Rent.ToListAsync();
 	}
-	public IEnumerable<Rent> GetAll(int departmentId, DateTime since, DateTime until)
+	public async Task<IEnumerable<Rent>> GetAll(int departmentId, DateTime since, DateTime until)
 	{
-		return _db.Rent.Include(m => m.Car).Where(m => m.Car.DepartamentId.Equals(departmentId) && (since <= m.Until) && (until >= m.Since)).ToList();
+		return await _db.Rent.Include(m => m.Car).Where(m => m.Car.DepartamentId.Equals(departmentId) && (since <= m.Until) && (until >= m.Since)).ToListAsync();
 
 	}
-	public Rent GetById(int id)
+	public async Task<Rent> GetById(int id)
 	{
-		var r = _db.Rent.FirstOrDefault(m => m.Id.Equals(id));
+		var r = await _db.Rent.FirstOrDefaultAsync(m => m.Id.Equals(id));
 		if(r == null)
 		{
 			throw new Exception("No such item exists");
 		}
 		return r;
 	}
-	public Rent Add(Rent rent)
+	public async Task<Rent> Add(Rent rent)
 	{
 		rent.Created = DateTime.UtcNow;
 		_db.Rent.Add(rent);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 		return rent;
 	}
-	public void Update(Rent rent)
+	public async Task Update(Rent rent)
 	{
 		rent.LastModified = DateTime.UtcNow;
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
-	public void Delete(Rent rent)
+	public async Task Delete(Rent rent)
 	{
 		_db.Rent.Remove(rent);
-		_db.SaveChanges();
+		await _db.SaveChangesAsync();
 	}
 }
 

@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Application.Mappings;
 using Application.Services;
+using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<RentendContext>(options =>
 	options.UseSqlServer(connectionString));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Password.RequireNonAlphanumeric = false)
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.Password.RequireNonAlphanumeric = false)
 	.AddEntityFrameworkStores<RentendContext>();
 // Add services to the container.
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
@@ -22,6 +23,8 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IPinRepository, PinRepository>();
 builder.Services.AddScoped<IPinService, PinService>();
+builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+builder.Services.AddScoped<IApplicationUserService, ApplicationUserService>();
 builder.Services.AddScoped<IRentRepository, RentRepository>();
 builder.Services.AddScoped<IRentService, RentService>();
 builder.Services.AddSingleton(AutoMapperConfig.Initialize());

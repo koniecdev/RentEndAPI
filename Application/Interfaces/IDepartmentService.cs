@@ -4,10 +4,10 @@ using Domain.Entities;
 namespace Application.Interfaces;
 public interface IDepartmentService
 {
-	IEnumerable<DepartmentDto> GetAllDepartments();
-	DepartmentDto GetById(int id);
-	DepartmentDto AddNewDepartment(CreateDepartmentDto newBrand);
-	public void UpdateDepartment(int id, UpdateDepartmentDto newBrand);
-	public void DeleteDepartment(int id);
+	Task<IEnumerable<DepartmentDto>> GetAllDepartments();
+	Task<DepartmentDto> GetById(int id);
+	Task<DepartmentDto> AddNewDepartment(CreateDepartmentDto newBrand);
+	public Task UpdateDepartment(int id, UpdateDepartmentDto newBrand);
+	public Task DeleteDepartment(int id);
 }
 

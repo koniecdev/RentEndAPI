@@ -16,44 +16,47 @@ public class RentService : IRentService
 		_mapper = mapper;
 	}
 
-	public IEnumerable<RentDto> GetAllRents()
+	public async Task<IEnumerable<RentDto>> GetAllRents()
 	{
-		var fromDb = _repository.GetAll();
+		var fromDb = await _repository.GetAll();
 		return _mapper.Map<IEnumerable<RentDto>>(fromDb);
 	}
 
-	public IEnumerable<RentDto> GetAllRents(int departmentId, DateTime since, DateTime until)
+	public async Task<IEnumerable<RentDto>> GetAllRents(int departmentId, DateTime since, DateTime until)
 	{
-		var fromDb = _repository.GetAll(departmentId, since, until);
+		var fromDb = await _repository.GetAll(departmentId, since, until);
 		return _mapper.Map<IEnumerable<RentDto>>(fromDb);
 	}
 
-	public RentDto GetById(int id)
+	public async Task<RentDto> GetById(int id)
 	{
-		var fromDb = _repository.GetById(id);
+		var fromDb = await _repository.GetById(id);
 		return _mapper.Map<RentDto>(fromDb);
 	}
 
-	public RentDto AddNewRent(CreateRentDto dto)
+	public async Task<RentDto> AddNewRent(CreateRentDto dto)
 	{
 		var mapped = _mapper.Map<Rent>(dto);
-		_repository.Add(mapped);
+		await _repository.Add(mapped);
 		return _mapper.Map<RentDto>(mapped);
 	}
 
-	public void UpdateRent(int id, UpdateRentDto dto)
+	public async Task UpdateRent(int id, UpdateRentDto dto)
 	{
-		var fromDb = _repository.GetById(id);
+		var fromDb = await _repository.GetById(id);
 		if(dto != null)
 		{
 			var returned = PatchRequestMap.PatchMap(fromDb, dto);
-			_repository.Update(returned);
+			await _repository.Update(returned);
 		}
 	}
 
-	public void DeleteRent(int id)
+	public async Task DeleteRent(int id)
 	{
-		var fromDb = _repository.GetById(id);
-		_repository.Delete(fromDb);
+		var fromDb = await _repository.GetById(id);
+		if (fromDb != null)
+		{
+			await _repository.Delete(fromDb);
+		}
 	}
 }

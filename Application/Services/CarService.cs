@@ -17,37 +17,45 @@ public class CarService : ICarService
 		_carRepository = carRepository;
 		_mapper = mapper;
 	}
-	public IEnumerable<CarDto> GetAllCars()
+	public async Task<IEnumerable<CarDto>> GetAllCars()
 	{
-		var cars = _carRepository.GetAll();
+		var cars = await _carRepository.GetAll();
 		return _mapper.Map<IEnumerable<CarDto>>(cars);
 	}
 
-	public CarDto GetById(int id)
+	public async Task<CarDto> GetById(int id)
 	{
-		var car = _carRepository.GetById(id);
+		var car = await _carRepository.GetById(id);
 		return _mapper.Map<CarDto>(car);
 	}
 
-	public CarDto AddNewCar(CreateCarDto newBrand)
+	public async Task<CarDto> AddNewCar(CreateCarDto newBrand)
 	{
 		var mapped = _mapper.Map<Car>(newBrand);
-		var car = _carRepository.Add(mapped);
+		var car = await _carRepository.Add(mapped);
 		return _mapper.Map<CarDto>(car);
 	}
-	public void UpdateCar(int id, UpdateCarDto newBrand)
+	public async Task UpdateCar(int id, UpdateCarDto newBrand)
 	{
-		Car carOrigin = _carRepository.GetById(id); // this should be db object with props from newBrand
+		Car carOrigin = await _carRepository.GetById(id); // this should be db object with props from newBrand
 		if(carOrigin != null)
 		{
 			var returned = PatchRequestMap.PatchMap(carOrigin, newBrand);
-			_carRepository.Update(returned);
+			await _carRepository.Update(returned);
+		}
+		else
+		{
+			throw new Exception("item not found");
 		}
 	}
 
-	public void DeleteCar(int id)
+	public async Task DeleteCar(int id)
 	{
-		var car = _carRepository.GetById(id);
-		_carRepository.Delete(car);
+		var car = await _carRepository.GetById(id);
+		if (car == null)
+		{
+			throw new Exception("item not found");
+		}
+		await _carRepository.Delete(car);
 	}
 }

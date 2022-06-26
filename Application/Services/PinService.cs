@@ -16,38 +16,42 @@ public class PinService : IPinService
 		_mapper = mapper;
 	}
 
-	public IEnumerable<PinDto> GetAllPins()
+	public async Task<IEnumerable<PinDto>> GetAllPins()
 	{
-		var fromDb = _repository.GetAll();
+		var fromDb = await _repository.GetAll();
 		return _mapper.Map<IEnumerable<PinDto>>(fromDb);
 	}
 
-	public PinDto GetById(int id)
+	public async Task<PinDto> GetById(int id)
 	{
-		var fromDb = _repository.GetById(id);
+		var fromDb = await _repository.GetById(id);
 		return _mapper.Map<PinDto>(fromDb);
 	}
 
-	public PinDto AddNewPin(CreatePinDto dto)
+	public async Task<PinDto> AddNewPin(CreatePinDto dto)
 	{
 		var mapped = _mapper.Map<Pin>(dto);
-		_repository.Add(mapped);
+		await _repository.Add(mapped);
 		return _mapper.Map<PinDto>(mapped);
 	}
 
-	public void UpdatePin(int id, UpdatePinDto dto)
+	public async Task UpdatePin(int id, UpdatePinDto dto)
 	{
-		var fromDb = _repository.GetById(id);
+		var fromDb = await _repository.GetById(id);
 		if(dto != null)
 		{
 			var returned = PatchRequestMap.PatchMap(fromDb, dto);
-			_repository.Update(returned);
+			await _repository.Update(returned);
 		}
 	}
 
-	public void DeletePin(int id)
+	public async Task DeletePin(int id)
 	{
-		var fromDb = _repository.GetById(id);
-		_repository.Delete(fromDb);
+		var fromDb = await _repository.GetById(id);
+		if(fromDb == null)
+		{
+			throw new Exception("not found");
+		}
+		await _repository.Delete(fromDb);
 	}
 }

@@ -15,9 +15,9 @@ namespace WebAPI.Controllers
 			_carService = carService;
 		}
 		[HttpGet]
-		public IActionResult Get()
+		public async Task<IActionResult> Get()
 		{
-			var cars = _carService.GetAllCars();
+			var cars = await _carService.GetAllCars();
 			if(cars == null)
 			{
 				return NotFound();
@@ -25,13 +25,13 @@ namespace WebAPI.Controllers
 			return Ok(cars);
 		}
 		[HttpGet("{id}")]
-		public IActionResult Get(int id)
+		public async Task<IActionResult> Get(int id)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var car = _carService.GetById(id);
+			var car = await _carService.GetById(id);
 			if(car == null)
 			{
 				return NotFound();
@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
 			return Ok(car);
 		}
 		[HttpPost]
-		public IActionResult Create(CreateCarDto createCarDto)
+		public async Task<IActionResult> Create(CreateCarDto createCarDto)
 		{
 			if(createCarDto == null)
 			{
@@ -49,37 +49,37 @@ namespace WebAPI.Controllers
 			{
 				return UnprocessableEntity();
 			}
-			var car = _carService.AddNewCar(createCarDto);
+			var car = await _carService.AddNewCar(createCarDto);
 			return Created($"api/Cars/{car.Id}", car);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdateCarDto updateCarDto)
+		public async Task<IActionResult> Update(int id, UpdateCarDto updateCarDto)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _carService.GetById(id);
+			var fromDb = await _carService.GetById(id);
 			if (fromDb == null)
 			{
 				return NotFound();
 			}
-			_carService.UpdateCar(id, updateCarDto);
+			await _carService.UpdateCar(id, updateCarDto);
 			return NoContent();
 		}
 		[HttpDelete("{id}")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			if(id == 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _carService.GetById(id);
+			var fromDb = await _carService.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			_carService.DeleteCar(id);
+			await _carService.DeleteCar(id);
 			return NoContent();
 		}
 	}

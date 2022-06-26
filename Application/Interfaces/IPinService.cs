@@ -3,10 +3,10 @@
 namespace Application.Interfaces;
 public interface IPinService
 {
-	IEnumerable<PinDto> GetAllPins();
-	PinDto GetById(int id);
-	PinDto AddNewPin(CreatePinDto newPin);
-	public void UpdatePin(int id, UpdatePinDto newPin);
-	public void DeletePin(int id);
+	Task<IEnumerable<PinDto>> GetAllPins();
+	Task<PinDto> GetById(int id);
+	Task<PinDto> AddNewPin(CreatePinDto newPin);
+	public Task UpdatePin(int id, UpdatePinDto newPin);
+	public Task DeletePin(int id);
 }
 

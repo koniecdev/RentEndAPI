@@ -15,9 +15,9 @@ namespace WebAPI.Controllers
 			_brandService = brandService;
 		}
 		[HttpGet]
-		public IActionResult Get()
+		public async Task<IActionResult> Get()
 		{
-			var brands = _brandService.GetAllBrands();
+			var brands = await _brandService.GetAllBrands();
 			if(brands == null)
 			{
 				return NotFound();
@@ -25,13 +25,13 @@ namespace WebAPI.Controllers
 			return Ok(brands);
 		}
 		[HttpGet("{id}")]
-		public IActionResult Get(int id)
+		public async Task<IActionResult> Get(int id)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var brand = _brandService.GetById(id);
+			var brand = await _brandService.GetById(id);
 			if(brand == null)
 			{
 				return NotFound();
@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
 			return Ok(brand);
 		}
 		[HttpPost]
-		public IActionResult Create(CreateBrandDto createBrandDto)
+		public async Task<IActionResult> Create(CreateBrandDto createBrandDto)
 		{
 			if(createBrandDto == null)
 			{
@@ -49,37 +49,37 @@ namespace WebAPI.Controllers
 			{
 				return UnprocessableEntity();
 			}
-			var brand = _brandService.AddNewBrand(createBrandDto);
+			var brand = await _brandService.AddNewBrand(createBrandDto);
 			return Created($"api/Brands/{brand.Id}", brand);
 		}
 		[HttpPatch("{id}")]
-		public IActionResult Update(int id, UpdateBrandDto updateBrandDto)
+		public async Task<IActionResult> Update(int id, UpdateBrandDto updateBrandDto)
 		{
 			if(id <= 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _brandService.GetById(id);
+			var fromDb = await _brandService.GetById(id);
 			if (fromDb == null)
 			{
 				return NotFound();
 			}
-			_brandService.UpdateBrand(id, updateBrandDto);
+			await _brandService.UpdateBrand(id, updateBrandDto);
 			return NoContent();
 		}
 		[HttpDelete("{id}")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			if(id == 0)
 			{
 				return NotFound();
 			}
-			var fromDb = _brandService.GetById(id);
+			var fromDb = await _brandService.GetById(id);
 			if(fromDb == null)
 			{
 				return NotFound();
 			}
-			_brandService.DeleteBrand(id);
+			await _brandService.DeleteBrand(id);
 			return NoContent();
 		}
 	}

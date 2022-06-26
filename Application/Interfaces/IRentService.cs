@@ -4,11 +4,11 @@ using Domain.Entities;
 namespace Application.Interfaces;
 public interface IRentService
 {
-	IEnumerable<RentDto> GetAllRents();
-	IEnumerable<RentDto> GetAllRents(int departmentId, DateTime since, DateTime until);
-	RentDto GetById(int id);
-	RentDto AddNewRent(CreateRentDto newBrand);
-	public void UpdateRent(int id, UpdateRentDto newBrand);
-	public void DeleteRent(int id);
+	Task<IEnumerable<RentDto>> GetAllRents();
+	Task<IEnumerable<RentDto>> GetAllRents(int departmentId, DateTime since, DateTime until);
+	Task<RentDto> GetById(int id);
+	Task<RentDto> AddNewRent(CreateRentDto newBrand);
+	public Task UpdateRent(int id, UpdateRentDto newBrand);
+	public Task DeleteRent(int id);
 }
 
